@@ -2,7 +2,7 @@
 
 var startBtn = document.getElementById("startBtn");
 var label = document.getElementById("label");
-var addTimerBtn = document.getElementById("addTimer");
+var addDelayBtn = document.getElementById("addDelay");
 
 function beep(text) {
     console.log("called");
@@ -36,7 +36,6 @@ Object.defineProperty(
 
 Delay.prototype.shoot = function(callback) {
     var self = this;
-    console.log(self.delay);
     self.timeoutID = setTimeout(function() { 
         self.action();
         callback();
@@ -49,23 +48,21 @@ Delay.prototype.cancell = function() {
 };
 
 Delay.prototype.disable = function() {
-    var inpt = this.node.getElementsByTagName("input")[0];
-    inpt.disabled = true;
+    this.inpt.disabled = true;
 };
 
 Delay.prototype.enable = function() {
-    var inpt = this.node.getElementsByTagName("input")[0];
-    inpt.removeAttribute("disabled");
+    this.inpt.removeAttribute("disabled");
 };
 
 
-function MetaTimer() {
-    this.timers = [];
+function Timer() {
+    this.delays = [];
     this.stopped = true;
 }
 
 Object.defineProperty(
-    MetaTimer.prototype,
+    Timer.prototype,
     'rounds',
     {
         get : function () {
@@ -80,19 +77,19 @@ Object.defineProperty(
 );
 
 
-MetaTimer.prototype.createTimer = function(event) {
-    var t = document.getElementById("timers");
-    var node = document.getElementById("timerTemplate").cloneNode(true);
-    node.className = "timer";
+Timer.prototype.createDelay = function(event) {
+    var t = document.getElementById("delays");
+    var node = document.getElementById("delayTemplate").cloneNode(true);
+    node.className = "delay";
     node.style.display = "block";
-    node.id = "timer";
+    node.id = "delay";
     
-    var timer = new Delay(node, function() { beep('Beep'); });
+    var delay = new Delay(node, function() { beep('Beep'); });
     t.appendChild(node);
-    this.timers.push(timer);
+    this.delays.push(delay);
 };
 
-MetaTimer.prototype.run = function() {
+Timer.prototype.run = function() {
     this.disable();
     this.stopped = false;
     if ( this.rounds === 0 ) {
@@ -104,35 +101,35 @@ MetaTimer.prototype.run = function() {
     }
 };
 
-MetaTimer.prototype.runRound = function(i) {
+Timer.prototype.runRound = function(i) {
     var self = this;
     if ( this.stopped )
         return;
-    if (i == self.timers.length) {
+    if (i == self.delays.length) {
         self.run();
     } else {
-        self.timers[i].shoot(function() { self.runRound(i + 1); });
+        self.delays[i].shoot(function() { self.runRound(i + 1); });
     }
 };
 
-MetaTimer.prototype.disable = function() {
-    this.timers.forEach(function(timer) { timer.disable(); });
+Timer.prototype.disable = function() {
+    this.delays.forEach(function(delay) { delay.disable(); });
 };
 
-MetaTimer.prototype.enable = function() {
-    this.timers.forEach(function(timer) { timer.enable(); });
+Timer.prototype.enable = function() {
+    this.delays.forEach(function(delay) { delay.enable(); });
 };
 
-MetaTimer.prototype.stop = function() {
+Timer.prototype.stop = function() {
     this.stopped = true;
     this.rounds = 0;
-    this.timers.forEach(function(timer) {timer.cancell();});
+    this.delays.forEach(function(delay) {delay.cancell();});
 };
 
 
-var controller = new MetaTimer(3);
+var controller = new Timer(3);
 
-addTimerBtn.addEventListener("click", function() { controller.createTimer(); });
+addDelayBtn.addEventListener("click", function() { controller.createDelay(); });
 
 startBtn.addEventListener('click', function() {
     if (startBtn.innerHTML === 'Start') {
