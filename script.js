@@ -5,17 +5,11 @@ var DISABLEDCOLOR = "lighten-2";
 var BEEP = document.getElementById("beep");
 
 var startBtn = document.getElementById("startBtn");
-var label = document.getElementById("label");
 var addDelayBtn = document.getElementById("addDelay");
 
 function beep(text) {
     console.log("called");
     BEEP.play();
-    var orig = label.innerHTML;
-    label.innerHTML = text;
-    setTimeout(function() {
-        label.innerHTML = orig;
-    }, 400);
 }
 
 function Delay(node, action) {
