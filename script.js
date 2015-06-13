@@ -41,12 +41,12 @@ Object.defineProperty(
 
 Delay.prototype.shoot = function(callback) {
     var self = this;
-    if (this.node.classList.contains(DISABLEDCOLOR))
-        this.node.classList.remove(DISABLEDCOLOR);
-    if (!this.node.classList.contains(ACTIVECOLOR))
-        this.node.classList.add(ACTIVECOLOR);
-    self.action();
     self.timeoutID = setTimeout(function() { 
+        if (self.node.classList.contains(DISABLEDCOLOR))
+            self.node.classList.remove(DISABLEDCOLOR);
+        if (!self.node.classList.contains(ACTIVECOLOR))
+            self.node.classList.add(ACTIVECOLOR);
+        self.action();
         callback();
     }, self.delay * 1000);
 };
@@ -101,13 +101,18 @@ Timer.prototype.createDelay = function(event) {
     this.delays.push(delay);
 };
 
-Timer.prototype.run = function() {
+Timer.prototype.start = function() {
     this.disable();
     this.stopped = false;
-    if ( this.rounds === 0 ) {
-        this.enable();
-        return;
+    this.run();
+    startBtn.innerHTML = 'Stop';
+};
+
+Timer.prototype.run = function() {
+    if ( this.stopped || this.rounds === 0 ) {
+        this.stop();
     } else {
+        this.disable();
         this.rounds -= 1;
         this.runRound(0);
     }
@@ -116,7 +121,7 @@ Timer.prototype.run = function() {
 Timer.prototype.runRound = function(i) {
     var self = this;
     if ( this.stopped )
-        return;
+        this.stop();
     if (i == self.delays.length) {
         self.run();
     } else {
@@ -134,8 +139,9 @@ Timer.prototype.enable = function() {
 
 Timer.prototype.stop = function() {
     this.stopped = true;
-    this.rounds = 0;
     this.delays.forEach(function(delay) {delay.cancell();});
+    this.enable();
+    startBtn.innerHTML = 'Start';
 };
 
 
@@ -145,10 +151,8 @@ addDelayBtn.addEventListener("click", function() { controller.createDelay(); });
 
 startBtn.addEventListener('click', function() {
     if (startBtn.innerHTML === 'Start') {
-        startBtn.innerHTML = 'Stop';
-        controller.run();
+        controller.start();
     } else {
-        startBtn.innerHTML = 'Start';
         controller.stop();
     }
 });
