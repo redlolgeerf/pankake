@@ -2,6 +2,7 @@
 
 var ACTIVECOLOR = "lighten-1";
 var DISABLEDCOLOR = "lighten-2";
+var BEEP = document.getElementById("beep");
 
 var startBtn = document.getElementById("startBtn");
 var label = document.getElementById("label");
@@ -9,6 +10,7 @@ var addDelayBtn = document.getElementById("addDelay");
 
 function beep(text) {
     console.log("called");
+    BEEP.play();
     var orig = label.innerHTML;
     label.innerHTML = text;
     setTimeout(function() {
@@ -43,8 +45,8 @@ Delay.prototype.shoot = function(callback) {
         this.node.classList.remove(DISABLEDCOLOR);
     if (!this.node.classList.contains(ACTIVECOLOR))
         this.node.classList.add(ACTIVECOLOR);
+    self.action();
     self.timeoutID = setTimeout(function() { 
-        self.action();
         callback();
     }, self.delay * 1000);
 };
