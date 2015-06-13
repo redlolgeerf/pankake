@@ -6,15 +6,15 @@
 
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css">
-    <title>Timer</title>
+    <title>Pankake</title>
   </head>
 
   <body>
     <div id="label" class="name">
       Hello world
     </div>
+
     <div id="timerTemplate" style="display: none">
-    <!-- <div id="timerTemplate"> -->
       <div class="row">
         <div class="input-field col s6">
           <i class="mdi-action-alarm prefix"></i>
@@ -23,29 +23,35 @@
         </div>
       </div>
     </div>
+
     <div class="container">
-
+      
       <div class="row">
-        <div class="col-3 left">
 
-        <div class="row">
-          <div class="input-field col s6">
+        <div class="col s4">
+
+          <div class="input-field col s3">
             <input id="rounds" type="text" class="validate" value="3">
             <label class="active" for="rounds">Rounds</label>
           </div>
+
           <a id="addTimer" class="btn-floating btn-large waves-effect waves-light red"><i class="mdi-content-add"></i></a>
           <a id="startBtn" class="waves-effect waves-light btn-large">Start</a>
+
         </div>
 
-        <div class="col-9">
+        <div class="col s4">
+
           <div id="timers">
           </div>
+
         </div>
+
       </div>
-      
+
     </div>
 
-    <script src="script.js" type="text/javascript" charset="utf-8"></script>
+    <script src="script.js"></script>
   </body>
 
 </html>
