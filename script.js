@@ -41,12 +41,10 @@ Object.defineProperty(
 
 Delay.prototype.shoot = function(callback) {
     var self = this;
+    self.makeActive();
     self.timeoutID = setTimeout(function() { 
-        if (self.node.classList.contains(DISABLEDCOLOR))
-            self.node.classList.remove(DISABLEDCOLOR);
-        if (!self.node.classList.contains(ACTIVECOLOR))
-            self.node.classList.add(ACTIVECOLOR);
         self.action();
+        self.makeInactive();
         callback();
     }, self.delay * 1000);
 };
@@ -54,19 +52,31 @@ Delay.prototype.shoot = function(callback) {
 Delay.prototype.cancell = function() {
    clearTimeout(this.timeoutID);
    this.enable();
+   this.makeInactive();
 };
 
 Delay.prototype.disable = function() {
     this.inpt.disabled = true;
+};
+
+Delay.prototype.enable = function() {
+    this.inpt.removeAttribute("disabled");
+};
+
+Delay.prototype.makeActive = function() {
+    if (this.node.classList.contains(DISABLEDCOLOR))
+        this.node.classList.remove(DISABLEDCOLOR);
+    if (!this.node.classList.contains(ACTIVECOLOR))
+        this.node.classList.add(ACTIVECOLOR);
+};
+
+Delay.prototype.makeInactive = function() {
     if (this.node.classList.contains(ACTIVECOLOR))
         this.node.classList.remove(ACTIVECOLOR);
     if (!this.node.classList.contains(DISABLEDCOLOR))
         this.node.classList.add(DISABLEDCOLOR);
 };
 
-Delay.prototype.enable = function() {
-    this.inpt.removeAttribute("disabled");
-};
 
 
 function Timer() {
